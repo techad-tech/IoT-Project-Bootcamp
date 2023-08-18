@@ -20,7 +20,7 @@ ThingsBoard tb(espClient);
 // the Wifi radio's status
 int status = WL_IDLE_STATUS;
 
-#define TOKEN               "pSc39SFe6z8bwzPXDVfy" // Change the token based on your account TB
+#define TOKEN               "pSc39SFe6z8bscsw224545462424253133wzPXDVfy" // Change the token based on your account TB
 #define THINGSBOARD_SERVER  "thingsboard.cloud" // FIXED
 
 const int heatPin = 12;

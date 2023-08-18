@@ -23,10 +23,10 @@ int status = WL_IDLE_STATUS;
 #define TOKEN               "pSc39SFe6z8bscsw224545462424253133wzPXDVfy" // Change the token based on your account TB
 #define THINGSBOARD_SERVER  "thingsboard.cloud" // FIXED
 
-const int heatPin = 12;
-const int bzrPin = 4;
-const int servoPin = 5;
-const int relayPin = 2;
+const int heatPin = 100;
+const int bzrPin = 200;
+const int servoPin = 300;
+const int relayPin = 400;
 
 //SENSOR DHT22
 const int DHT_PIN = 15;

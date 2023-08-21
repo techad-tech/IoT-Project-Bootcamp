@@ -1,0 +1,118 @@
+// Suscribher 
+
+#include <WiFi.h>
+#include "PubSubClient.h"
+#include <LiquidCrystal_I2C.h>
+
+const char* ssid = "Wokwi-GUEST";
+const char* password = "";
+const char* mqttServer = "broker.hivemq.com";
+int mqttPort = 1883;
+
+char clientId[50];
+
+WiFiClient espClient;
+PubSubClient client(espClient);
+LiquidCrystal_I2C lcd(0x27, 16, 2); 
+
+
+void setupMQTT() {
+  client.setServer(mqttServer, mqttPort); // Mengatur detail broker target  yang digunakan
+  client.setCallback(callback);           // jika kita ingin menerima pesan untuk langganan yang dibuat oleh klien
+}
+
+void mqttReconnect() {
+ while (!client.connected()) {
+   Serial.print("Attempting MQTT connection...");
+   lcd.print("Connecting...");
+   delay(2000);
+   lcd.clear();
+   long r = random(1000);
+   sprintf(clientId, "clientId-%ld", r);
+   if (client.connect(clientId)) {
+     Serial.print(clientId);
+     Serial.println(" connected");
+     lcd.setCursor(0, 0);
+     lcd.print(" connected");
+     delay(2000);
+     lcd.clear();
+     client.subscribe("monitor/bendungan/distance");
+   } else {
+     Serial.print("failed, rc=");
+     Serial.print(client.state());
+     Serial.println(" try again in 5 seconds");
+     delay(5000);
+   }
+ }
+}
+
+
+void callback(char* topic, byte* message, unsigned int length) {
+//  Serial.print("Message arrived on topic: ");
+//  Serial.print(topic);
+ Serial.print("Message: ");
+ String stMessage;
+  for (int i = 0; i < length; i++) {
+   Serial.print((char)message[i]);
+   stMessage += (char)message[i];
+ }
+
+ // Mengkonversi nilai dari string ke float
+  float fltMessage = stMessage.toFloat(); 
+
+
+ if (strcmp(topic, "monitor/bendungan/distance") == 0) {
+    Serial.print("\t Jarak Permukaan Air: ");
+    Serial.println(fltMessage);
+    Serial.println("Cm");
+    
+    lcd.setCursor(0, 0);
+    lcd.print("Jarak Permukaan: ");
+
+    lcd.setCursor(0,1);
+    lcd.print(fltMessage, 0);
+    lcd.print("Cm");
+
+}
+}
+
+void wifiConnect() {
+ WiFi.mode(WIFI_STA);
+ WiFi.begin(ssid, password);
+ while (WiFi.status() != WL_CONNECTED) {
+   delay(500);
+   Serial.print(".");
+ }
+}
+
+
+
+void setup() {
+ Serial.begin(115200);
+ delay(10);
+ Serial.println();
+ Serial.print("Connecting to ");
+ Serial.println(ssid);
+
+ wifiConnect();
+
+ Serial.println("");
+ Serial.println("WiFi connected");
+ Serial.println("IP address: ");
+ Serial.println(WiFi.localIP());
+ setupMQTT(); // setup koneksi ke broker
+ 
+  lcd.init();                      
+  lcd.backlight();
+}
+
+
+
+void loop() {
+ delay(10);
+ if (!client.connected()) {
+   mqttReconnect();
+ }
+ client.loop();
+}
+

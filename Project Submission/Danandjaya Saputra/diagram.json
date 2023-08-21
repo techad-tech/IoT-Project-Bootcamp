@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "author": "Danandjaya Saputra",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "wokwi-esp32-devkit-v1", "id": "esp", "top": -80.21, "left": -162.75, "attrs": {} },
+    {
+      "type": "wokwi-hc-sr04",
+      "id": "ultrasonic1",
+      "top": -150.37,
+      "left": 7.37,
+      "attrs": { "distance": "165" }
+    },
+    { "type": "wokwi-rgb-led", "id": "rgb1", "top": -52.95, "left": -231.39, "attrs": {} }
+  ],
+  "connections": [
+    [ "esp:TX0", "$serialMonitor:RX", "", [] ],
+    [ "esp:RX0", "$serialMonitor:TX", "", [] ],
+    [ "esp:D21", "ultrasonic1:TRIG", "orange", [ "h24.41", "v-26.17", "h125.71" ] ],
+    [ "esp:D19", "ultrasonic1:ECHO", "yellow", [ "h35.11", "v-23.07", "h125.01" ] ],
+    [ "esp:VN", "ultrasonic1:VCC", "red", [ "h-24.16", "v-58.99", "h144.47", "v39.33" ] ],
+    [ "esp:GND.1", "ultrasonic1:GND", "black", [ "h0" ] ],
+    [ "rgb1:R", "esp:D14", "red", [ "v0" ] ],
+    [ "rgb1:G", "esp:D27", "green", [ "v0" ] ],
+    [ "rgb1:B", "esp:D26", "blue", [ "v0" ] ],
+    [ "esp:VIN", "rgb1:COM", "black", [ "h0" ] ]
+  ],
+  "dependencies": {}
+}

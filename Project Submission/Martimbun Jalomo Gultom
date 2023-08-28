@@ -1,0 +1,60 @@
+#define BLYNK_TEMPLATE_ID "TMPL6YhpCc3nk"
+#define BLYNK_TEMPLATE_NAME "Project Kecil"
+#define BLYNK_AUTH_TOKEN "NHaYdzMD0Xr2S9Kq6VsNSrZgc9HzRlwY"
+
+#define pinTRIGGER 7
+#define pinECHO 6
+#define pinBUZZER 13
+
+long waktu, jarak;
+
+void setup() {
+  // put your setup code here, to run once:
+Serial.begin(9600);
+pinMode(pinTRIGGER, OUTPUT);
+pinMode(pinBUZZER, OUTPUT);
+pinMode(pinECHO, INPUT);
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+digitalWrite(pinTRIGGER,LOW);
+delayMicroseconds(3);
+digitalWrite(pinTRIGGER, HIGH);
+delayMicroseconds(10);
+digitalWrite(pinTRIGGER, LOW);
+
+waktu = pulseIn (pinECHO,HIGH);
+jarak = waktu / 58;
+
+if (jarak >= 4 && jarak < 50){
+  tone(pinBUZZER, 500);
+  delay(5);
+  
+}
+
+if (jarak >= 50 && jarak < 100){
+  tone(pinBUZZER, 400);
+  delay(50);
+  noTone(pinBUZZER);
+  delay(100);
+}
+
+if (jarak >= 100 && jarak < 150){
+  tone(pinBUZZER, 400);
+  delay(50);
+  noTone(pinBUZZER);
+  delay(150);
+}
+
+if (jarak >= 150 && jarak < 200){
+  tone(pinBUZZER, 300);
+  delay(50);
+  noTone(pinBUZZER);
+  delay(200);
+}
+
+else {noTone(pinBUZZER);
+}
+
+}
